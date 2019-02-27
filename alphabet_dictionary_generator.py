@@ -2,8 +2,8 @@ extended_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~
 alpha = {}
 ahpla = {}
 for char_i in range(0,len(extended_alphabet)):
-	alpha[extended_alphabet[char_i]] = str(char_i)+"∆"
-	ahpla[str(char_i)+"∆"] = extended_alphabet[char_i]
+	alpha[extended_alphabet[char_i]] = str(char_i+1)+"0"
+	ahpla[str(char_i+1)+"0"] = extended_alphabet[char_i]
 print(alpha)
 print()
 print(ahpla)
