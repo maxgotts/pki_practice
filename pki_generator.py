@@ -46,11 +46,13 @@ def revert(message):
 	return mssagee
 
 """ ENCODE MESSAGE FUNCTIONS """
-def encode(message): return int(convert(message))**e%n
-def decode(message): return revert(message**d%n)
+def encode(message):
+    print(e,n,message) 
+    return int(convert(message))**e%n
+def decode(message):
+    print(d,n,message) 
+    return revert(message**d%n)
 
-
-print(encode(input("==> ")))
-
-
-
+xyz = input('==> ')
+print(encode(xyz))
+print(decode(encode(xyz)))
