@@ -1,9 +1,6 @@
+from numpy import power
+
 """ SET UP """
-P = 0
-Q = 0
-e = 0
-n = 0
-d = 0
 def phi(P,Q): return (P-1)*(Q-1)
 
 from random import choice as sample
@@ -19,15 +16,18 @@ primes = list(map(lambda x: int(x),primes_pre))
 
 """ GENERATE PUBLIC & PRIVATE KEY """
 def generateKeys():
+	global P
+	global Q
+	global n
+	global e
+	global d
 	P = sample(primes)
 	Q = sample(primes)
-	print((P,Q))
+	print("n",(P,Q))
 	n = P*Q
 	e = sample(range(1,phi(P,Q)))
 	d = (2*phi(P,Q)+1)/float(e)
-	print((n,e,d))
-
-generateKeys()
+        #print("e", e, "d", d, "n", n)
 
 """ ALPHABET DICTIONARIES """
 alphabet = {'a': '10', 'b': '20', 'c': '30', 'd': '40', 'e': '50', 'f': '60', 'g': '70', 'h': '80', 'i': '90', 'j': '100', 'k': '110', 'l': '120', 'm': '130', 'n': '140', 'o': '150', 'p': '160', 'q': '170', 'r': '180', 's': '190', 't': '200', 'u': '210', 'v': '220', 'w': '230', 'x': '240', 'y': '250', 'z': '260', 'A': '270', 'B': '280', 'C': '290', 'D': '300', 'E': '310', 'F': '320', 'G': '330', 'H': '340', 'I': '350', 'J': '360', 'K': '370', 'L': '380', 'M': '390', 'N': '400', 'O': '410', 'P': '420', 'Q': '430', 'R': '440', 'S': '450', 'T': '460', 'U': '470', 'V': '480', 'W': '490', 'X': '500', 'Y': '510', 'Z': '520', '`': '530', '~': '540', '1': '550', '!': '560', '2': '570', '@': '580', '3': '590', '£': '600', '4': '610', '$': '620', '5': '630', '%': '640', '6': '650', '^': '660', '7': '670', '&': '680', '8': '690', '*': '700', '9': '710', '(': '720', '0': '730', ')': '740', '-': '750', '_': '760', '=': '770', '+': '780', '[': '790', '{': '800', ']': '810', '}': '820', '\\': '830', '|': '840', ';': '850', ':': '860', "'": '870', '"': '880', ',': '890', '<': '900', '.': '910', '>': '920', '/': '930', '?': '940', ' ': '950'}
@@ -37,7 +37,7 @@ reverse_alphabet = {'10': 'a', '20': 'b', '30': 'c', '40': 'd', '50': 'e', '60':
 def convert(message):
 	mssagee = ""
 	for char in list(message): mssagee += alphabet[char]
-	return mssagee
+	return int(mssagee)
 def revert(message):
 	mssagee = ""
 	split_message = message.split('0')
@@ -47,12 +47,15 @@ def revert(message):
 
 """ ENCODE MESSAGE FUNCTIONS """
 def encode(message):
-    print(e,n,message) 
-    return int(convert(message))**e%n
+    print(convert(message))
+    return power(convert(message),e)%n
 def decode(message):
-    print(d,n,message) 
-    return revert(message**d%n)
+    print(revert(message))
+    return revert(power(message),d%n)
+
+generateKeys()
 
 xyz = input('==> ')
 print(encode(xyz))
 print(decode(encode(xyz)))
+
