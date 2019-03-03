@@ -1,9 +1,8 @@
-from numpy import power
-
 """ SET UP """
-def phi(P,Q): return (P-1)*(Q-1)
-
 from random import choice as sample
+from alphabet_dictionary_generator import pre,post
+from sympy import mod_inverse
+
 
 """ EXTRACT PRIMES """
 primes_roto = open("primes_mod.txt", "r")
@@ -12,50 +11,61 @@ for line in primes_roto:primes = line
 primes_pre = line.split("/")
 del primes_pre[-1]
 primes = list(map(lambda x: int(x),primes_pre))
-#print(primes)
 
 """ GENERATE PUBLIC & PRIVATE KEY """
 def generateKeys():
-	global P
-	global Q
-	global n
-	global e
-	global d
+	global P, Q, n, e, d
 	P = sample(primes)
 	Q = sample(primes)
-	print("n",(P,Q))
 	n = P*Q
-	e = sample(range(1,phi(P,Q)))
-	d = (2*phi(P,Q)+1)/float(e)
-        #print("e", e, "d", d, "n", n)
+	phi = (P-1)*(Q-1)
+	e = sample(range(1,phi))
+	try: d = mod_inverse(e, phi)
+	except Exception: generateKeys()
+	print((e*d)%phi,"== 1?")
+	print("try: \ne", e, "\nd", d, "\nn", n,(P,Q))
 
 """ ALPHABET DICTIONARIES """
-alphabet = {'a': '10', 'b': '20', 'c': '30', 'd': '40', 'e': '50', 'f': '60', 'g': '70', 'h': '80', 'i': '90', 'j': '100', 'k': '110', 'l': '120', 'm': '130', 'n': '140', 'o': '150', 'p': '160', 'q': '170', 'r': '180', 's': '190', 't': '200', 'u': '210', 'v': '220', 'w': '230', 'x': '240', 'y': '250', 'z': '260', 'A': '270', 'B': '280', 'C': '290', 'D': '300', 'E': '310', 'F': '320', 'G': '330', 'H': '340', 'I': '350', 'J': '360', 'K': '370', 'L': '380', 'M': '390', 'N': '400', 'O': '410', 'P': '420', 'Q': '430', 'R': '440', 'S': '450', 'T': '460', 'U': '470', 'V': '480', 'W': '490', 'X': '500', 'Y': '510', 'Z': '520', '`': '530', '~': '540', '1': '550', '!': '560', '2': '570', '@': '580', '3': '590', '£': '600', '4': '610', '$': '620', '5': '630', '%': '640', '6': '650', '^': '660', '7': '670', '&': '680', '8': '690', '*': '700', '9': '710', '(': '720', '0': '730', ')': '740', '-': '750', '_': '760', '=': '770', '+': '780', '[': '790', '{': '800', ']': '810', '}': '820', '\\': '830', '|': '840', ';': '850', ':': '860', "'": '870', '"': '880', ',': '890', '<': '900', '.': '910', '>': '920', '/': '930', '?': '940', ' ': '950'}
-reverse_alphabet = {'10': 'a', '20': 'b', '30': 'c', '40': 'd', '50': 'e', '60': 'f', '70': 'g', '80': 'h', '90': 'i', '100': 'j', '110': 'k', '120': 'l', '130': 'm', '140': 'n', '150': 'o', '160': 'p', '170': 'q', '180': 'r', '190': 's', '200': 't', '210': 'u', '220': 'v', '230': 'w', '240': 'x', '250': 'y', '260': 'z', '270': 'A', '280': 'B', '290': 'C', '300': 'D', '310': 'E', '320': 'F', '330': 'G', '340': 'H', '350': 'I', '360': 'J', '370': 'K', '380': 'L', '390': 'M', '400': 'N', '410': 'O', '420': 'P', '430': 'Q', '440': 'R', '450': 'S', '460': 'T', '470': 'U', '480': 'V', '490': 'W', '500': 'X', '510': 'Y', '520': 'Z', '530': '`', '540': '~', '550': '1', '560': '!', '570': '2', '580': '@', '590': '3', '600': '£', '610': '4', '620': '$', '630': '5', '640': '%', '650': '6', '660': '^', '670': '7', '680': '&', '690': '8', '700': '*', '710': '9', '720': '(', '730': '0', '740': ')', '750': '-', '760': '_', '770': '=', '780': '+', '790': '[', '800': '{', '810': ']', '820': '}', '830': '\\', '840': '|', '850': ';', '860': ':', '870': "'", '880': '"', '890': ',', '900': '<', '910': '.', '920': '>', '930': '/', '940': '?', '950': ' '}
+alphabet =  {'a': '01', 'b': '02', 'c': '03', 'd': '04', 'e': '05', 'f': '06', 'g': '07', 'h': '08', 'i': '09', 'j': '10', 'k': '11', 'l': '12', 'm': '13', 'n': '14', 'o': '15', 'p': '16', 'q': '17', 'r': '18', 's': '19', 't': '20', 'u': '21', 'v': '22', 'w': '23', 'x': '24', 'y': '25', 'z': '26', 'A': '27', 'B': '28', 'C': '29', 'D': '30', 'E': '31', 'F': '32', 'G': '33', 'H': '34', 'I': '35', 'J': '36', 'K': '37', 'L': '38', 'M': '39', 'N': '40', 'O': '41', 'P': '42', 'Q': '43', 'R': '44', 'S': '45', 'T': '46', 'U': '47', 'V': '48', 'W': '49', 'X': '50', 'Y': '51', 'Z': '52', '`': '53', '~': '54', '1': '55', '!': '56', '2': '57', '@': '58', '3': '59', '£': '60', '4': '61', '$': '62', '5': '63', '%': '64', '6': '65', '^': '66', '7': '67', '&': '68', '8': '69', '*': '70', '9': '71', '(': '72', '0': '73', ')': '74', '-': '75', '_': '76', '=': '77', '+': '78', '[': '79', '{': '80', ']': '81', '}': '82', '\\': '83', '|': '84', ';': '85', ':': '86', "'": '87', '"': '88', ',': '89', '<': '90', '.': '91', '>': '92', '/': '93', '?': '94', ' ': '95'}
+reverse_alphabet =  {'01': 'a', '02': 'b', '03': 'c', '04': 'd', '05': 'e', '06': 'f', '07': 'g', '08': 'h', '09': 'i', '10': 'j', '11': 'k', '12': 'l', '13': 'm', '14': 'n', '15': 'o', '16': 'p', '17': 'q', '18': 'r', '19': 's', '20': 't', '21': 'u', '22': 'v', '23': 'w', '24': 'x', '25': 'y', '26': 'z', '27': 'A', '28': 'B', '29': 'C', '30': 'D', '31': 'E', '32': 'F', '33': 'G', '34': 'H', '35': 'I', '36': 'J', '37': 'K', '38': 'L', '39': 'M', '40': 'N', '41': 'O', '42': 'P', '43': 'Q', '44': 'R', '45': 'S', '46': 'T', '47': 'U', '48': 'V', '49': 'W', '50': 'X', '51': 'Y', '52': 'Z', '53': '`', '54': '~', '55': '1', '56': '!', '57': '2', '58': '@', '59': '3', '60': '£', '61': '4', '62': '$', '63': '5', '64': '%', '65': '6', '66': '^', '67': '7', '68': '&', '69': '8', '70': '*', '71': '9', '72': '(', '73': '0', '74': ')', '75': '-', '76': '_', '77': '=', '78': '+', '79': '[', '80': '{', '81': ']', '82': '}', '83': '\\', '84': '|', '85': ';', '86': ':', '87': "'", '88': '"', '89': ',', '90': '<', '91': '.', '92': '>', '93': '/', '94': '?', '95': ' '}
+
+""" MODULAR MULTIPLICATIVE INVERSE FUNCTIONS -- stolen from StackExchange :P
+
+def egcd(a, b):
+    if a == 0: return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1: raise Exception('modular inverse does not exist')
+    else: return x % m
+"""
 
 """ CONVERT MESSAGE FUNCTIONS """
 def convert(message):
 	mssagee = ""
 	for char in list(message): mssagee += alphabet[char]
+	print("message,convert",int(mssagee))
 	return int(mssagee)
 def revert(message):
 	mssagee = ""
-	split_message = message.split('0')
-	del split_message[-1]
-	for char in split_message: mssagee += reverse_alphabet[char+'0']
+	message = str(message)
+	print("message, revert",message)
+	if len(message)%2 != int(pre): message = pre + message
+	split_message = [str(message)[i:i+2] for i in range(0, len(str(message)), 2)]
+	for char in split_message: mssagee += reverse_alphabet[char]
 	return mssagee
 
 """ ENCODE MESSAGE FUNCTIONS """
 def encode(message):
-    print(convert(message))
-    return power(convert(message),e)%n
+    return int(pow(convert(message),e,n))
 def decode(message):
-    print(revert(message))
-    return revert(power(message),d%n)
+	#print(message,d,n)
+	return revert(pow(message,d,n))
 
 generateKeys()
 
 xyz = input('==> ')
-print(encode(xyz))
-print(decode(encode(xyz)))
-
+print(xyz,"-->",decode(encode(xyz)))
