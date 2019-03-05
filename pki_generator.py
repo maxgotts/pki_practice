@@ -70,18 +70,20 @@ def decrypt(message):
 
 generateKeys()
 
-check_if_true = []
+
 def check_if_decode_worked(message):
 	if not message == decrypt(encrypt(message)): check_if_true.append(message)
-
-x = 0
-while check_if_true == []:
-	running_str = ""
-	length = randint(0,10000)
-	for i in range(0,length): running_str += sample(extended_alphabet)
-	check_if_decode_worked(running_str)
-	if check_if_true == []: print("#",x,": len",length,"==>",True)
-	else: print("#",x,": len",length,"==>",False)
-	x += 1
-print(stragglers)
-print(check_if_true)
+def DEBUG():
+	check_if_true = []
+	x = 0
+	while check_if_true == []:
+		running_str = ""
+		length = randint(0,10000)
+		for i in range(0,length): running_str += sample(extended_alphabet)
+		check_if_decode_worked(running_str)
+		if check_if_true == []: print("#",x,": len",length,"==>",True)
+		else: print("#",x,": len",length,"==>",False)
+		x += 1
+	print(stragglers)
+	print(check_if_true)
+DEBUG()
